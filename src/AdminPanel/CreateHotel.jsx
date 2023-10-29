@@ -3,20 +3,21 @@ import axios from 'axios';
 import { GrClose } from "react-icons/gr";
 import moment from "moment";
 
-const CreateHotel = ({ openModal, closeModal, updateExpenseData }) => {
+const CreateHotel = ({ openModal, closeModal, updateHotelsData }) => {
   const [error, setError] = useState(null);
 
   const initialFormData = {
     title: '',
     date: '',
     numberOfBed: '',
-    description: '',
-    amount: '',
+    image: '',
+    price: '',
+    acOrNonAc: '',
   };
 
   const [formData, setFormData] = useState(initialFormData);
 
-  const { title, date, numberOfBed, description, amount } = formData;
+  const { title, date, numberOfBed, image, price, acOrNonAc } = formData;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -30,7 +31,7 @@ const CreateHotel = ({ openModal, closeModal, updateExpenseData }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!title || !date || !numberOfBed || !description || !amount) {
+    if (!title || !date || !numberOfBed || !image || !price || !acOrNonAc) {
       setError("Please fill in all the required fields.");
       setTimeout(() => {
         setError(null);
@@ -38,19 +39,21 @@ const CreateHotel = ({ openModal, closeModal, updateExpenseData }) => {
       return;
     }
 
-    const expenseData = {
+    const hotelData = {
       title,
       date,
-      numberOfBed,
-      description,
-      amount: Number(amount),
-      currentTime: moment().format(),
+      numberOfBed: Number(numberOfBed),
+      image,
+      price: Number(price),
+      acOrNonAc,
     };
 
-    axios.post(`http://localhost:8080/hotels`, expenseData)
+    console.log(hotelData, "HotelData is there or not...")
+
+    axios.post(`http://localhost:8080/hotels`, hotelData)
       .then((res) => {
         setFormData(initialFormData);
-        updateExpenseData(expenseData);
+        updateHotelsData(hotelData);
         closeModal();
       })
       .catch((error) => {
@@ -97,32 +100,53 @@ const CreateHotel = ({ openModal, closeModal, updateExpenseData }) => {
                 className="w-full p-2 border rounded"
               >
                 <option value="">Choose one item</option>
-                <option value="Health">Health</option>
-                <option value="Electronics">Electronics</option>
-                <option value="Travel">Travel</option>
-                <option value="Education">Education</option>
-                <option value="Books">Books</option>
-                <option value="Others">Others</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
               </select>
             </div>
             <div className="mb-4">
-              <textarea
-                id="description"
-                value={description}
-                name='description'
+              <input
+                id="image"
+                type="text"
+                value={image}
+                name='image'
+                placeholder='Enter Image Url'
                 onChange={handleInputChange}
-                placeholder='Enter description'
                 className="w-full p-2 border rounded"
               />
             </div>
             <div className="mb-4">
               <input
-                id="amount"
-                type="number"
-                value={amount}
-                name='amount'
+                type="radio"
+                id="acOrNonAc"
+                name="acOrNonAc"
+                value="true"
+                checked={acOrNonAc === "true"}
                 onChange={handleInputChange}
-                placeholder='Enter amount'
+                className="mr-2"
+              />
+              <label htmlFor="acOrNonAc" className="mr-2">AC</label>
+              <input
+                type="radio"
+                id="acOrNonAc"
+                name="acOrNonAc"
+                value="false"
+                checked={acOrNonAc === "false"}
+                onChange={handleInputChange}
+                className="mr-2"
+              />
+              <label htmlFor="acOrNonAc">Non-AC</label>
+            </div>
+
+            <div className="mb-4">
+              <input
+                id="price"
+                type="number"
+                value={price}
+                name='price'
+                onChange={handleInputChange}
+                placeholder='Enter price'
                 min="0"
                 className="w-full p-2 border rounded"
               />

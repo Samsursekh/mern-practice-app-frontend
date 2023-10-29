@@ -3,20 +3,20 @@ import axios from 'axios';
 import { GrClose } from "react-icons/gr";
 import moment from "moment";
 
-const CreateExpense = ({ openModal, closeModal, updateExpenseData }) => {
+const CreateHotel = ({ openModal, closeModal, updateExpenseData }) => {
   const [error, setError] = useState(null);
 
   const initialFormData = {
-    name: '',
+    title: '',
     date: '',
-    category: '',
+    numberOfBed: '',
     description: '',
     amount: '',
   };
 
   const [formData, setFormData] = useState(initialFormData);
 
-  const { name, date, category, description, amount } = formData;
+  const { title, date, numberOfBed, description, amount } = formData;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -30,7 +30,7 @@ const CreateExpense = ({ openModal, closeModal, updateExpenseData }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!name || !date || !category || !description || !amount) {
+    if (!title || !date || !numberOfBed || !description || !amount) {
       setError("Please fill in all the required fields.");
       setTimeout(() => {
         setError(null);
@@ -39,15 +39,15 @@ const CreateExpense = ({ openModal, closeModal, updateExpenseData }) => {
     }
 
     const expenseData = {
-      name,
+      title,
       date,
-      category,
+      numberOfBed,
       description,
       amount: Number(amount),
       currentTime: moment().format(),
     };
 
-    axios.post(`${import.meta.env.VITE_EXPENSES_DATA}`, expenseData)
+    axios.post(`http://localhost:8080/hotels`, expenseData)
       .then((res) => {
         setFormData(initialFormData);
         updateExpenseData(expenseData);
@@ -63,16 +63,16 @@ const CreateExpense = ({ openModal, closeModal, updateExpenseData }) => {
       <div className="fixed inset-0 flex items-center justify-center z-50 ">
         <div className="modal-bg absolute inset-0 bg-black opacity-50"></div>
         <div className="modal z-50 bg-white p-6 rounded-lg shadow-lg w-[400px]">
-          <div className='mb-4 flex justify-start'><h2 className="text-2xl font-bold">Create New Expense</h2></div>
+          <div className='mb-4 flex justify-start'><h2 className="text-2xl font-bold">Create New Hotel</h2></div>
 
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <input
-                id="name"
+                id="title"
                 type="text"
-                value={name}
-                name='name'
-                placeholder='Enter Name'
+                value={title}
+                name='title'
+                placeholder='Enter title'
                 onChange={handleInputChange}
                 maxLength={140}
                 className="w-full p-2 border rounded"
@@ -90,9 +90,9 @@ const CreateExpense = ({ openModal, closeModal, updateExpenseData }) => {
             </div>
             <div className="mb-4">
               <select
-                id="category"
-                value={category}
-                name='category'
+                id="numberOfBed"
+                value={numberOfBed}
+                name='numberOfBed'
                 onChange={handleInputChange}
                 className="w-full p-2 border rounded"
               >
@@ -144,7 +144,7 @@ const CreateExpense = ({ openModal, closeModal, updateExpenseData }) => {
                   type="submit"
                   className="bg-green-600 text-white p-2 w-full rounded px-4"
                 >
-                  Create Expense
+                  Create Hotel
                 </button>
               </div>
             </div>
@@ -157,4 +157,4 @@ const CreateExpense = ({ openModal, closeModal, updateExpenseData }) => {
   )
 }
 
-export default CreateExpense
+export default CreateHotel

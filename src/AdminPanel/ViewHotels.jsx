@@ -85,7 +85,6 @@ const ViewHotels = () => {
         confirmEdit(e, hotelToEdit);
     };
 
-
     const confirmEdit = (e, hotelToEdit) => {
         e.preventDefault();
         const hotelID = hotelToEdit._id;
@@ -201,7 +200,7 @@ const ViewHotels = () => {
                                         </div>
                                         {
                                             isOpenCustomisedBtn[hotel._id] ? (
-                                                <div className='flex absolute top-1 justify-evenly items-center bg-blue-600 w-[100px] h-[60px] m-auto'>
+                                                <div className='flex absolute  right-14 top-4 z-50 justify-evenly items-center  bg-blue-600 w-[100px] h-[60px] m-auto'>
                                                     <button onClick={() => handleEditModal(hotel)}>
                                                         <BiSolidPencil className='text-3xl text-white' />
                                                     </button>
